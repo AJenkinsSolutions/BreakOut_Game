@@ -20,11 +20,23 @@ class Ball(Turtle):
         self.setpos(0,-200)
         self.speed('fastest')
         
+        self.direction_x_speed = 2
+        self.direction_y_speed = 2
+        
     def move(self):
         #inital movement
-        self.setx(self.xcor() + 2)
-        self.sety(self.ycor() + 2)
+        self.setx(self.xcor() + self.direction_x_speed)
+        self.sety(self.ycor() + self.direction_y_speed)
         
+        if self.xcor() > 410:
+            self.setx(410)
+            #reverse direction
+            self.direction_x_speed *= -1
+        
+        if self.xcor() < -415:
+            self.setx(-415)
+            #reverse direction
+            self.direction_x_speed *= -1
         
         
         
