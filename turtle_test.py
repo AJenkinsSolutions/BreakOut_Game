@@ -32,13 +32,13 @@ class Score(Turtle):
         self.write('GAME OVER', align=ALIGNMENT, font=FONT)
 
 class Brick_y(Turtle):
-    def __init__(self, color, level):
+    def __init__(self, color, level, pos):
         super().__init__()
         
         self.shape('square')
         self.color = self.color(color)
         self.penup()
-        self.setpos(random.randint(-360,360),level)
+        self.setpos(pos,level)
         self.shapesize(2,4,2)
 
 
@@ -152,12 +152,16 @@ p = Paddle()
 b = Ball()
 s = Score()
 
-for i in range(10):
-    b1 = Brick_y(color=COLORS[0], level=0)
-    b2 = Brick_y(color=COLORS[1], level=40)
-    b2 = Brick_y(color=COLORS[2], level=80)
-    b2 = Brick_y(color=COLORS[3], level=120)
-    b2 = Brick_y(color=COLORS[4], level=160)
+init_pos = -360
+pos_increment = 0
+for i in range(9):
+    b1 = Brick_y(color=COLORS[0], pos=init_pos+pos_increment+random.randint(0,random.randint(2,13)), level=0)
+    b2 = Brick_y(color=COLORS[1], pos=init_pos+pos_increment+random.randint(0,random.randint(2,9)), level=40)
+    b2 = Brick_y(color=COLORS[2], pos=init_pos+pos_increment+random.randint(0,random.randint(3,8)), level=80)
+    b2 = Brick_y(color=COLORS[3], pos=init_pos+pos_increment+random.randint(0,random.randint(4,12)), level=120)
+    b2 = Brick_y(color=COLORS[4], pos=init_pos+pos_increment+random.randint(0,random.randint(3,16)), level=160)
+    
+    pos_increment += random.randint(80, 100)
 
 
 
