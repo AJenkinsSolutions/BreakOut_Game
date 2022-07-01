@@ -9,7 +9,24 @@ window.title('test')
 window.tracer(0)
 window.update()
 
-
+class Score(Turtle):
+    def __init__(self):
+        super().__init__()
+        self.score = 0
+        self.color('white')
+        self.hideturtle()
+        self.penup()
+        self.goto(0,180)
+        self.write(f'{self.score}', align='center', font=('Courier', 80, 'normal'))
+        
+    def update_score(self):
+        pass
+    def increase_score(self):
+        pass
+    def game_over(self):
+        self.goto(0, 0)
+        self.write('GAME OVER', align=ALIGNMENT, font=FONT)
+    
 class Ball(Turtle):
     def __init__(self):
         super().__init__()
@@ -46,7 +63,8 @@ class Ball(Turtle):
             self.sety(250)
             #reverse direction
             self.direction_y_speed *= -1
-        
+       
+       #Lower Boundry 
         if self.ycor() < -280:
            self.setpos(0, -200)
            self.direction_y_speed *= -1
@@ -114,6 +132,7 @@ class Paddle(Turtle):
 
 p = Paddle()
 b = Ball()
+s = Score()
 window.update()
 
 game_on = True
