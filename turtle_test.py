@@ -9,6 +9,10 @@ window.title('test')
 window.tracer(0)
 window.update()
 
+
+COLORS = ['red', 'blue', 'green', 'yellow', 'orange']
+
+
 class Score(Turtle):
     def __init__(self):
         super().__init__()
@@ -26,7 +30,21 @@ class Score(Turtle):
     def game_over(self):
         self.goto(0, 0)
         self.write('GAME OVER', align=ALIGNMENT, font=FONT)
-    
+
+class Brick_y(Turtle):
+    def __init__(self, color, level):
+        super().__init__()
+        
+        self.shape('square')
+        self.color = self.color(color)
+        self.penup()
+        self.setpos(random.randint(-360,360),level)
+        self.shapesize(2,4,2)
+
+
+
+
+
 class Ball(Turtle):
     def __init__(self):
         super().__init__()
@@ -133,6 +151,19 @@ class Paddle(Turtle):
 p = Paddle()
 b = Ball()
 s = Score()
+
+for i in range(10):
+    b1 = Brick_y(color=COLORS[0], level=0)
+    b2 = Brick_y(color=COLORS[1], level=40)
+    b2 = Brick_y(color=COLORS[2], level=80)
+    b2 = Brick_y(color=COLORS[3], level=120)
+    b2 = Brick_y(color=COLORS[4], level=160)
+
+
+
+
+
+
 window.update()
 
 game_on = True
@@ -149,6 +180,10 @@ while game_on:
     window.onkey(p.move_left, 'Left')
     window.onkey(p.move_right, 'Right')
     
+    
+    
+    
+    # score board methods 
     window.update()
 
 
