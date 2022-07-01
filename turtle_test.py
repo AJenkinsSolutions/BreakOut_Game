@@ -14,53 +14,67 @@ class Ball(Turtle):
     def __init__(self):
         super().__init__()
         self.shape('circle')
+        self.setheading(90)
         self.color('blue', 'cyan')
         self.penup()
         
-        self.setpos(0,200)
+        self.setpos(0,-200)
         self.speed('fastest')
+        self.acceleration = 2
         
-        self.direction_x_speed = 2
-        self.direction_y_speed = 2
+        self.direction_x_speed = self.acceleration
+        self.direction_y_speed = self.acceleration
         
     def move(self, px, py):
         #inital movement
-#         self.setx(self.xcor() + self.direction_x_speed)
-        self.sety(self.ycor() + - self.direction_y_speed)
+        self.setx(self.xcor() + self.direction_x_speed)
+        self.sety(self.ycor() + self.direction_y_speed)
         
+        #Right Boundry
         if self.xcor() > 410:
             self.setx(410)
             #reverse direction
             self.direction_x_speed *= -1
-        
+        #LeftBoundry
         if self.xcor() < -415:
             self.setx(-415)
             #reverse direction
             self.direction_x_speed *= -1
         
+        #Upper Boundry
         if self.ycor() > 250:
             self.sety(250)
             #reverse direction
             self.direction_y_speed *= -1
         
+        if self.ycor() < -280:
+           self.setpos(0, -200)
+           self.direction_y_speed *= -1
+            
+        
         self.paddleCollision(px,py)
             
     def paddleCollision(self,px, py):
-        print('paddle',px,py)
+#         print('paddle',px,py)
         
         #middle collision
         if self.ycor() == py + 20 and self.xcor() == px:
             print('middle paddle')
-            self.sety = py
+            self.direction_y_speed *= -1
+            
+            
         #right collision
         if self.ycor() == py + 20:
             if self.xcor() > px and self.xcor() <= px+40:
-                self.sety = py
+                
+                self.direction_y_speed *= -1
                 print('right paddle')
+                
         #left collision
         if self.ycor() == py + 20:
             if self.xcor() < px and self.xcor() >= px-40:
-                self.sety = py
+                
+                self.direction_y_speed *= -1
                 print('left paddle')
         
 
@@ -81,8 +95,8 @@ class Paddle(Turtle):
         self.setpos(0,-220)
         
         #boundry
-        self.right_bounds = (330, 220)
-        self.left_bounds = (-350, -220)
+        self.right_bounds = (360, 220)
+        self.left_bounds = (-370, -220)
         
     def move_left(self):
         if self.pos() >= self.left_bounds:
