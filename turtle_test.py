@@ -38,8 +38,12 @@ class Ball(Turtle):
             #reverse direction
             self.direction_x_speed *= -1
         
+        if self.ycor() > 250:
+            self.sety(250)
+            #reverse direction
+            self.direction_y_speed *= -1
         
-        
+                
 
 class Paddle(Turtle):
     def __init__(self):
