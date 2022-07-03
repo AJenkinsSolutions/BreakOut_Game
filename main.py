@@ -57,7 +57,7 @@ class Ball(Turtle):
         self.color('blue', 'cyan')
         self.penup()
 
-        self.setpos(-45, 200)
+        self.setpos(-0, 200)
         self.speed('fastest')
         self.acceleration = 2
 
@@ -66,8 +66,11 @@ class Ball(Turtle):
 
     def move(self, px, py, bx, by):
         # inital movement
-        # self.setx(self.xcor() + self.direction_x_speed)
-        self.sety(self.ycor() + self.direction_y_speed)
+        # self.setx(self.xcor() - self.direction_x_speed)
+        self.sety(self.ycor() - self.direction_y_speed)
+
+        self.brick_Collision(bx, by)
+        self.paddleCollision(px, py)
 
         # Right Boundary
         if self.xcor() >= 410:
@@ -95,8 +98,7 @@ class Ball(Turtle):
             self.setpos(0, -180)
             self.direction_y_speed *= -1
 
-        self.brick_Collision(bx, by)
-        self.paddleCollision(px, py)
+
 
     def paddleCollision(self, px, py):
         #         print('paddle',px,py)
@@ -123,7 +125,6 @@ class Ball(Turtle):
     def brick_Collision(self, bx, by):
         #Below brick
         if self.ycor() == by -30:
-            print('y: inline ')
             if self.xcor() == bx:
                 print('middle brick')
                 self.direction_y_speed *= -1
@@ -133,6 +134,7 @@ class Ball(Turtle):
             elif bx >= self.xcor() >= bx-45:
                 print('left brick')
                 self.direction_y_speed *= -1
+        #Bottom Brick collision
         if self.ycor() == by + 30:
             print('top y inline')
             if self.xcor() == bx:
@@ -144,6 +146,32 @@ class Ball(Turtle):
             elif bx >= self.xcor() >= bx-45:
                 print('left brick')
                 self.direction_y_speed *= -1
+
+
+
+        #Right Brick Collision
+        #This might need to be fixed
+        # bug maybe present
+        if self.xcor() == bx + 50:
+            print('right edge')
+            if by + 25 >= self.ycor() >= by -25:
+                print('right collision')
+                self.direction_x_speed *= -1
+
+
+
+        if self.xcor() == bx - 50:
+            print('left edge')
+            if by + 25 >= self.ycor() >= by -25:
+                print('Left collision')
+                self.direction_x_speed *= -1
+
+
+
+
+
+
+
 
 
 
