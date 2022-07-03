@@ -8,7 +8,7 @@ file = '/Users/apjenkins/Development/Audio/blue.mp3'
 
 # Screen Configuration
 window = Screen()
-window.setup(858, 525)
+window.setup(858, 525, 50, 50)
 window.bgcolor('grey')
 window.title('test')
 window.tracer(0)
@@ -38,7 +38,7 @@ class Score(Turtle):
         self.write('GAME OVER', align='center', font=('Courier', 80, 'normal'))
 
 
-class Brick_y(Turtle):
+class Brick(Turtle):
     def __init__(self, color, level, pos):
         super().__init__()
 
@@ -57,7 +57,7 @@ class Ball(Turtle):
         self.color('blue', 'cyan')
         self.penup()
 
-        self.setpos(0, -200)
+        self.setpos(-45, 200)
         self.speed('fastest')
         self.acceleration = 2
 
@@ -66,30 +66,30 @@ class Ball(Turtle):
 
     def move(self, px, py, bx, by):
         # inital movement
-        self.setx(self.xcor() + self.direction_x_speed)
+        # self.setx(self.xcor() + self.direction_x_speed)
         self.sety(self.ycor() + self.direction_y_speed)
 
-        # Right Boundry
+        # Right Boundary
         if self.xcor() >= 410:
             self.make_Sound('wall')
             self.setx(409)
             # reverse direction
             self.direction_x_speed *= -1
-        # LeftBoundry
+        # LeftBoundary
         if self.xcor() < -415:
             self.make_Sound('wall')
             self.setx(-414)
             # reverse direction
             self.direction_x_speed *= -1
 
-        # Upper Boundry
+        # Upper Boundary
         if self.ycor() > 250:
             self.make_Sound('wall')
             self.sety(250)
             # reverse direction
             self.direction_y_speed *= -1
 
-        # Lower Boundry
+        # Lower Boundary
         if self.ycor() < -280:
             self.make_Sound('outbounds')
             self.setpos(0, -180)
@@ -100,7 +100,6 @@ class Ball(Turtle):
 
     def paddleCollision(self, px, py):
         #         print('paddle',px,py)
-
         # middle collision
         if self.ycor() == py + 20 and self.xcor() == px:
             print('middle paddle')
@@ -122,8 +121,36 @@ class Ball(Turtle):
                 self.make_Sound('paddle')
 
     def brick_Collision(self, bx, by):
-        if self.ycor() == by + 20:
-            print(' inline')
+        #Below brick
+        if self.ycor() == by -30:
+            print('y: inline ')
+            if self.xcor() == bx:
+                print('middle brick')
+                self.direction_y_speed *= -1
+            elif bx <= self.xcor() <= bx +45:
+                print('right brick')
+                self.direction_y_speed *= -1
+            elif bx >= self.xcor() >= bx-45:
+                print('left brick')
+                self.direction_y_speed *= -1
+        if self.ycor() == by + 30:
+            print('top y inline')
+            if self.xcor() == bx:
+                print('top middle brick')
+                self.direction_y_speed *= -1
+            elif bx <= self.xcor() <=bx +45:
+                print('top right brick')
+                self.direction_y_speed *= -1
+            elif bx >= self.xcor() >= bx-45:
+                print('left brick')
+                self.direction_y_speed *= -1
+
+
+
+
+
+
+
 
     def make_Sound(self, collision_type):
         if collision_type == 'wall':
@@ -164,12 +191,11 @@ class Paddle(Turtle):
             x += 20
             self.setx(x)
 
-
+# init Objects
 p = Paddle()
 b = Ball()
 s = Score()
-
-brick = Brick_y(COLORS[0], pos=(120), level=0)
+brick = Brick(COLORS[0], pos=0, level=0)
 
 # init_pos = -360
 # pos_increment = 0
@@ -184,9 +210,7 @@ brick = Brick_y(COLORS[0], pos=(120), level=0)
 
 
 window.update()
-
 game_on = True
-
 while game_on:
     window.update()
     time.sleep(0.01)
@@ -196,7 +220,6 @@ while game_on:
     window.listen()
     window.onkey(p.move_left, 'Left')
     window.onkey(p.move_right, 'Right')
-
     # score board methods
     window.update()
 

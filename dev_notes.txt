@@ -1,0 +1,11 @@
+
+
+
+
+Each of our entities are class objects
+
+Objects
+	- Ball 
+	- Paddle
+	- Brick 
+	- Score
