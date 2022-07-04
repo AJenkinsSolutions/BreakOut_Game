@@ -67,20 +67,10 @@ class Ball(Turtle):
         self.y_collision = None
         self.x_collision = None
 
-    def move(self, px, py, bx, by):
+    def move(self):
         # inital movement
         self.setx(self.xcor() + self.direction_x_speed)
         self.sety(self.ycor() + self.direction_y_speed)
-
-        if self.brick_Collision(bx, by) == 'y':
-            self.direction_y_speed *= -1
-            self.make_Sound('brick')
-        if self.brick_Collision(bx, by) == 'x':
-            self.direction_x_speed *= -1
-            self.make_Sound('brick')
-
-
-        self.paddleCollision(px, py)
 
         # Right Boundary
         if self.xcor() == 410:
@@ -142,7 +132,6 @@ class Ball(Turtle):
         BRICK_Y_LEN = 25
 
 
-
         # Right edg
         if self.xcor() == bx + X_EDGE:
             print('right edge')
@@ -150,54 +139,45 @@ class Ball(Turtle):
                 print('right middle')
             if by + 25 >= self.ycor() >= by - BRICK_Y_LEN:
                 print('right collision')
-                return 'x'
+                self.direction_x_speed *= -1
+                self.make_Sound('brick')
         # Left edge
         if self.xcor() == bx - X_EDGE:
             print('left edge')
             if by + 25 >= self.ycor() >= by - BRICK_Y_LEN:
                 print('Left collision')
-                return 'x'
+                self.direction_x_speed *= -1
+                self.make_Sound('brick')
 
         #Below brick
         if self.ycor() == by - Y_EDGE:
             if self.xcor() == bx:
                 print('middle brick')
-                return 'y'
+                self.direction_y_speed *= -1
+                self.make_Sound('brick')
             elif bx <= self.xcor() <= bx +BRICK_X_LEN:
                 print('right brick')
-                return 'y'
+                self.direction_y_speed *= -1
+                self.make_Sound('brick')
             elif bx >= self.xcor() >= bx -BRICK_X_LEN:
                 print('left brick')
-                return 'y'
+                self.direction_y_speed *= -1
+                self.make_Sound('brick')
         # Bottom Brick collision
         if self.ycor() == by + Y_EDGE:
             print('top y inline')
             if self.xcor() == bx:
                 print('top middle brick')
-                return 'y'
+                self.direction_y_speed *= -1
+                self.make_Sound('brick')
             elif bx <= self.xcor() <= bx +BRICK_X_LEN:
                 print('top right brick')
-                return 'y'
+                self.direction_y_speed *= -1
+                self.make_Sound('brick')
             elif bx >= self.xcor() >= bx -BRICK_X_LEN:
                 print('left brick')
-                return 'y'
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+                self.direction_y_speed *= -1
+                self.make_Sound('brick')
 
     def make_Sound(self, collision_type):
         if collision_type == 'wall':
@@ -242,19 +222,23 @@ class Paddle(Turtle):
 p = Paddle()
 b = Ball()
 s = Score()
-# brick = Brick(COLORS[0], pos=0, level=0)
 
-# init_pos = -360
-# pos_increment = 0
-# for i in range(9):
-#     b1 = Brick_y(color=COLORS[0], pos=init_pos+pos_increment+random.randint(0,random.randint(2,13)), level=0)
-#     b2 = Brick_y(color=COLORS[1], pos=init_pos+pos_increment+random.randint(0,random.randint(2,9)), level=40)
-#     b2 = Brick_y(color=COLORS[2], pos=init_pos+pos_increment+random.randint(0,random.randint(3,8)), level=80)
-#     b2 = Brick_y(color=COLORS[3], pos=init_pos+pos_increment+random.randint(0,random.randint(4,12)), level=120)
-#     b2 = Brick_y(color=COLORS[4], pos=init_pos+pos_increment+random.randint(0,random.randint(3,16)), level=160)
-#
-#     pos_increment += random.randint(80, 100)
+# brick = Brick(COLORS[0], pos=-150, level=-20)
+# brick_1 = Brick(COLORS[2], pos=150, level=20)
 
+init_pos = -360
+pos_increment = 0
+level = [0, 50, 100, 150, 200,250]
+bricks = []
+color_index = 0
+for j in range(5):
+    for i in range(3):
+        brick = Brick(COLORS[j], level=level[j], pos=-360+pos_increment)
+        bricks.append(brick)
+        pos_increment += 100
+        color_index += 1
+
+print(len(bricks))
 
 window.update()
 game_on = True
@@ -262,7 +246,14 @@ while game_on:
     window.update()
     time.sleep(0.01)
 
-    b.move(px=p.xcor(), py=p.ycor(), bx=brick.xcor(), by=brick.ycor())
+
+    b.move()
+    b.paddleCollision(px=p.xcor(), py=p.ycor())
+
+    for i in range(len(bricks)):
+        b.brick_Collision(bx=bricks[i].xcor(), by=bricks[i].ycor())
+
+
 
     window.listen()
     window.onkey(p.move_left, 'Left')
