@@ -29,8 +29,19 @@ class Score(Turtle):
     def update_score(self):
         self.write(f'{self.score} ', align='center', font=('Courier', 80, 'normal'))
 
-    def increase_score(self):
-        self.score += 10
+    def increase_score(self, color):
+        if color == 'red':
+            print('Score increase by 10: red')
+            self.score += 5
+        elif color == 'blue':
+            self.score += 10
+        elif color == 'green':
+            self.score += 15
+        elif color == 'yellow':
+            self.score += 20
+        elif color == 'orange':
+            self.score += 25
+
         self.clear()
         self.update_score()
 
@@ -40,11 +51,11 @@ class Score(Turtle):
 
 
 class Brick(Turtle):
-    def __init__(self, color, level, pos):
+    def __init__(self, body_color, level, pos):
         super().__init__()
 
         self.shape('square')
-        self.color = self.color(color)
+        self.color(body_color)
         self.penup()
         self.setpos(pos, level)
         self.shapesize(2, 4, 2)
@@ -257,14 +268,16 @@ while game_on:
     time.sleep(0.01)
 
     b.move()
-
     b.paddleCollision(px=p.xcor(), py=p.ycor())
 
     for i in range(len(bricks)):
         if (b.brick_Collision(bx=bricks[i].xcor(), by=bricks[i].ycor())):
+            current_brick = bricks[i]
             #remove brick
-            bricks[i].setpos(0, -400)
-            s.increase_score()
+            current_brick.setpos(0, -400)
+            #get color of brick
+
+            s.increase_score(color=current_brick.color()[0])
             print('increase score')
 
 
