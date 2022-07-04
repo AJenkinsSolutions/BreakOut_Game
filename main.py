@@ -57,38 +57,50 @@ class Ball(Turtle):
         self.color('blue', 'cyan')
         self.penup()
 
-        self.setpos(-0, 200)
+        self.setpos(0, -200)
         self.speed('fastest')
         self.acceleration = 2
 
         self.direction_x_speed = self.acceleration
         self.direction_y_speed = self.acceleration
 
+        self.y_collision = None
+        self.x_collision = None
+
     def move(self, px, py, bx, by):
         # inital movement
-        # self.setx(self.xcor() - self.direction_x_speed)
-        self.sety(self.ycor() - self.direction_y_speed)
+        self.setx(self.xcor() + self.direction_x_speed)
+        self.sety(self.ycor() + self.direction_y_speed)
 
-        self.brick_Collision(bx, by)
+        if self.brick_Collision(bx, by) == 'y':
+            self.direction_y_speed *= -1
+            self.make_Sound('brick')
+        if self.brick_Collision(bx, by) == 'x':
+            self.direction_x_speed *= -1
+            self.make_Sound('brick')
+
+
         self.paddleCollision(px, py)
 
         # Right Boundary
-        if self.xcor() >= 410:
+        if self.xcor() == 410:
             self.make_Sound('wall')
-            self.setx(409)
+            #debug for some reason setting the self.setx was distrubting collison with brick on this axsis
+            # self.setx(409)
+            print('right border')
             # reverse direction
             self.direction_x_speed *= -1
         # LeftBoundary
         if self.xcor() < -415:
             self.make_Sound('wall')
-            self.setx(-414)
+            # self.setx(-414)
             # reverse direction
             self.direction_x_speed *= -1
 
         # Upper Boundary
         if self.ycor() > 250:
             self.make_Sound('wall')
-            self.sety(250)
+            # self.sety(250)
             # reverse direction
             self.direction_y_speed *= -1
 
@@ -123,48 +135,55 @@ class Ball(Turtle):
                 self.make_Sound('paddle')
 
     def brick_Collision(self, bx, by):
+        Y_EDGE = 30
+        X_EDGE = 50
+
+        BRICK_X_LEN = 45
+        BRICK_Y_LEN = 25
+
+
+
+        # Right edg
+        if self.xcor() == bx + X_EDGE:
+            print('right edge')
+            if self.ycor() == by:
+                print('right middle')
+            if by + 25 >= self.ycor() >= by - BRICK_Y_LEN:
+                print('right collision')
+                return 'x'
+        # Left edge
+        if self.xcor() == bx - X_EDGE:
+            print('left edge')
+            if by + 25 >= self.ycor() >= by - BRICK_Y_LEN:
+                print('Left collision')
+                return 'x'
+
         #Below brick
-        if self.ycor() == by -30:
+        if self.ycor() == by - Y_EDGE:
             if self.xcor() == bx:
                 print('middle brick')
-                self.direction_y_speed *= -1
-            elif bx <= self.xcor() <= bx +45:
+                return 'y'
+            elif bx <= self.xcor() <= bx +BRICK_X_LEN:
                 print('right brick')
-                self.direction_y_speed *= -1
-            elif bx >= self.xcor() >= bx-45:
+                return 'y'
+            elif bx >= self.xcor() >= bx -BRICK_X_LEN:
                 print('left brick')
-                self.direction_y_speed *= -1
-        #Bottom Brick collision
-        if self.ycor() == by + 30:
+                return 'y'
+        # Bottom Brick collision
+        if self.ycor() == by + Y_EDGE:
             print('top y inline')
             if self.xcor() == bx:
                 print('top middle brick')
-                self.direction_y_speed *= -1
-            elif bx <= self.xcor() <=bx +45:
+                return 'y'
+            elif bx <= self.xcor() <= bx +BRICK_X_LEN:
                 print('top right brick')
-                self.direction_y_speed *= -1
-            elif bx >= self.xcor() >= bx-45:
+                return 'y'
+            elif bx >= self.xcor() >= bx -BRICK_X_LEN:
                 print('left brick')
-                self.direction_y_speed *= -1
+                return 'y'
 
 
 
-        #Right Brick Collision
-        #This might need to be fixed
-        # bug maybe present
-        if self.xcor() == bx + 50:
-            print('right edge')
-            if by + 25 >= self.ycor() >= by -25:
-                print('right collision')
-                self.direction_x_speed *= -1
-
-
-
-        if self.xcor() == bx - 50:
-            print('left edge')
-            if by + 25 >= self.ycor() >= by -25:
-                print('Left collision')
-                self.direction_x_speed *= -1
 
 
 
@@ -223,7 +242,7 @@ class Paddle(Turtle):
 p = Paddle()
 b = Ball()
 s = Score()
-brick = Brick(COLORS[0], pos=0, level=0)
+# brick = Brick(COLORS[0], pos=0, level=0)
 
 # init_pos = -360
 # pos_increment = 0

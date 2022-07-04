@@ -9,3 +9,13 @@ Objects
 	- Paddle
 	- Brick 
 	- Score
+
+
+Ball 
+	functions
+		- Brick Collision
+				-inputs (Bricks Objects: x-coordinates, y-corodinates)
+				-Outputs (Returns True)
+				-Constants (bricks Xedges, brick Yedges, Brick xlen, Brick yen )
+				
+				-Edge Cases ()
