@@ -23,13 +23,13 @@ class Score(Turtle):
         self.color('white')
         self.hideturtle()
         self.penup()
-        self.goto(0, 180)
-        self.write(f'{self.score}', align='center', font=('Courier', 80, 'normal'))
+        self.goto(-360, 190)
+        self.write(f'Score:{self.score}', align='center', font=('Courier', 24, 'normal'))
 
     def update_score(self):
-        self.write(f'{self.score} ', align='center', font=('Courier', 80, 'normal'))
+        self.write(f'Score:{self.score} ', align='center', font=('Courier', 24, 'normal'))
 
-    def increase_score(self, color):
+    def increase_score(self, color=None):
         if color == 'red':
             print('Score increase by 10: red')
             self.score += 5
@@ -41,6 +41,9 @@ class Score(Turtle):
             self.score += 20
         elif color == 'orange':
             self.score += 25
+        else:
+            self.score -= 10
+
 
         self.clear()
         self.update_score()
@@ -49,6 +52,16 @@ class Score(Turtle):
         self.goto(0, 0)
         self.write('GAME OVER', align='center', font=('Courier', 80, 'normal'))
 
+class Title(Turtle):
+    def __init__(self):
+        super().__init__()
+
+        self.title = 'Python BreakOut'
+        self.color('white')
+        self.hideturtle()
+        self.penup()
+        self.goto(0, 190)
+        self.write(f'{self.title}', align='center', font=('Courier', 40, 'normal'))
 
 class Brick(Turtle):
     def __init__(self, body_color, level, pos):
@@ -78,11 +91,8 @@ class Ball(Turtle):
         self.direction_x_speed = self.acceleration
         self.direction_y_speed = self.acceleration
 
-        self.y_collision = None
-        self.x_collision = None
 
     def move(self):
-
 
         # initial movement
         self.setx(self.xcor() + self.direction_x_speed)
@@ -111,13 +121,16 @@ class Ball(Turtle):
             # reverse direction
             self.direction_y_speed *= -1
 
+        # Out Of Bounds
         if self.outBounds():
             return True
 
 
 
     def outBounds(self):
-        # Out of Bounds
+        """
+        :return:    True if out of Bounds
+        """
         if self.ycor() < -280:
             self.make_Sound('outbounds')
             print('outbounds')
@@ -252,6 +265,7 @@ class Paddle(Turtle):
 p = Paddle()
 b = Ball()
 s = Score()
+t = Title()
 
 init_pos = -360
 pos_increment = 0
@@ -260,14 +274,16 @@ bricks = []
 color_index = 0
 
 # 5 rows of 8 blocks each
-for j in range(5):
+#5  8
+for j in range(1):
     pos_increment = 0
-    for i in range(8):
+    for i in range(2):
         brick = Brick(COLORS[j], level=level[j], pos=-360 + pos_increment)
         bricks.append(brick)
         pos_increment += 100
         color_index += 1
 
+dead_bricks = []
 window.update()
 game_on = True
 while game_on:
@@ -279,11 +295,11 @@ while game_on:
         window.update()
         time.sleep(1.5)
         window.bgcolor('grey')
+        s.increase_score()
         window.update()
 
-
-
     b.paddleCollision(px=p.xcor(), py=p.ycor())
+
     for i in range(len(bricks)):
         if (b.brick_Collision(bx=bricks[i].xcor(), by=bricks[i].ycor(), color=bricks[i].color()[0])):
             current_brick = bricks[i]
@@ -292,8 +308,7 @@ while game_on:
             # get color of brick
             s.increase_score(color=current_brick.color()[0])
             b.make_Sound('brick', color=current_brick.color()[0])
-            print('increase score')
-
+            dead_bricks.append(i)
 
 
 
@@ -303,3 +318,14 @@ while game_on:
     window.onkey(p.move_right, 'Right')
     # score board methods
     window.update()
+
+
+    if len(dead_bricks) == len(bricks):
+
+        # TODO: 1 ADD A GAME OVER SCRREN THAT DISPLAY THE SCORE AND DEATH COUNT
+        # TODO: 2 ADD Death count
+        # TODO: Refactor write dev doc notes
+        game_on = False
+
+
+print('Console Mes')
