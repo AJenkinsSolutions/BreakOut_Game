@@ -57,11 +57,21 @@ class Title(Turtle):
         super().__init__()
 
         self.title = 'Python BreakOut'
+        self.ascii = ''' _______  __   __  _______  __   __  _______  __    _    _______  ______    _______  _______  ___   _  _______  __   __  _______   
+|       ||  | |  ||       ||  | |  ||       ||  |  | |  |  _    ||    _ |  |       ||   _   ||   | | ||       ||  | |  ||       |  
+|    _  ||  |_|  ||_     _||  |_|  ||   _   ||   |_| |  | |_|   ||   | ||  |    ___||  |_|  ||   |_| ||   _   ||  | |  ||_     _|  
+|   |_| ||       |  |   |  |       ||  | |  ||       |  |       ||   |_||_ |   |___ |       ||      _||  | |  ||  |_|  |  |   |    
+|    ___||_     _|  |   |  |       ||  |_|  ||  _    |  |  _   | |    __  ||    ___||       ||     |_ |  |_|  ||       |  |   |    
+|   |      |   |    |   |  |   _   ||       || | |   |  | |_|   ||   |  | ||   |___ |   _   ||    _  ||       ||       |  |   |    
+|___|      |___|    |___|  |__| |__||_______||_|  |__|  |_______||___|  |_||_______||__| |__||___| |_||_______||_______|  |___| '''
         self.color('white')
         self.hideturtle()
         self.penup()
         self.goto(0, 190)
-        self.write(f'{self.title}', align='center', font=('Courier', 40, 'normal'))
+        self.write(f'{self.ascii}', align='center', font=('Courier', 6, 'normal'))
+
+
+
 
 class Brick(Turtle):
     def __init__(self, body_color, level, pos):
