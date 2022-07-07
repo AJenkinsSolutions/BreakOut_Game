@@ -70,6 +70,30 @@ class Title(Turtle):
         self.goto(0, 190)
         self.write(f'{self.ascii}', align='center', font=('Courier', 6, 'normal'))
 
+class DeathCounter(Turtle):
+    def __init__(self):
+        super().__init__()
+
+        self.death_count = 0
+        self.death_symbol = ''
+        self.color('red')
+        self.hideturtle()
+        self.penup()
+        self.goto(360, 190)
+        self.write(f'{self.death_symbol}', align='center', font=('Courier', 32, 'bold'))
+
+
+    def update_death_icon(self):
+        self.write(f'{self.death_symbol}', align='center', font=('Courier', 32, 'bold'))
+
+    def increase_death_count(self):
+        self.death_count += 1
+
+        self.death_symbol += '☠'
+        self.clear()
+
+        self.update_death_icon()
+        print(self.death_symbol)
 
 
 
@@ -92,6 +116,8 @@ class Ball(Turtle):
         self.color('blue', 'cyan')
         self.penup()
 
+        self.deaths = 0
+
         self.setpos(0, -200)
         self.speed("normal")
 
@@ -100,6 +126,8 @@ class Ball(Turtle):
 
         self.direction_x_speed = self.acceleration
         self.direction_y_speed = self.acceleration
+
+
 
 
     def move(self):
@@ -276,6 +304,7 @@ p = Paddle()
 b = Ball()
 s = Score()
 t = Title()
+d = DeathCounter()
 
 init_pos = -360
 pos_increment = 0
@@ -285,13 +314,14 @@ color_index = 0
 
 # 5 rows of 8 blocks each
 #5  8
-for j in range(1):
+for j in range(5):
     pos_increment = 0
-    for i in range(2):
+    for i in range(8):
         brick = Brick(COLORS[j], level=level[j], pos=-360 + pos_increment)
         bricks.append(brick)
         pos_increment += 100
         color_index += 1
+
 
 dead_bricks = []
 window.update()
@@ -300,8 +330,11 @@ while game_on:
     window.update()
     time.sleep(0.01)
 
+    #out of bounds
     if b.move():
+        d.increase_death_count()
         window.bgcolor('red')
+
         window.update()
         time.sleep(1.5)
         window.bgcolor('grey')
@@ -323,10 +356,12 @@ while game_on:
 
 
 
+
+
     window.listen()
     window.onkey(p.move_left, 'Left')
     window.onkey(p.move_right, 'Right')
-    # score board methods
+
     window.update()
 
 
